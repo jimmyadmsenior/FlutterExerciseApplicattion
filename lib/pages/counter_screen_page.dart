@@ -8,47 +8,46 @@ class CounterScreen extends StatefulWidget {
 }
 
 class _CounterScreenState extends State<CounterScreen> {
-  int _counter = 0;
-  String _message = 'Toque nos botões para alterar o contador ';
-  Color _counterColor = Colors.blue;
+  final ValueNotifier<int> _counter = ValueNotifier<int>(0);
+  final ValueNotifier<String> _message =
+      ValueNotifier<String>('Toque nos botões para alterar o contador ');
+  final ValueNotifier<Color> _counterColor = ValueNotifier<Color>(Colors.blue);
 
   void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+    _counter.value++;
+    _updateMessage();
+    _updateCounterColor();
   }
 
   void _decrementCounter() {
-    setState(() {
-      _counter--;
-    });
+    _counter.value--;
+    _updateMessage();
+    _updateCounterColor();
   }
 
   void _resetCounter() {
-    setState(() {
-      _counter = 0;
-      _message = 'Contador resetado';
-      _counterColor = Colors.blue;
-    });
+    _counter.value = 0;
+    _message.value = 'Contador resetado';
+    _counterColor.value = Colors.blue;
   }
 
   void _updateMessage() {
-    if (_counter == 0) {
-      _message = 'Contador zerado';
-    } else if (_counter > 0) {
-      _message = 'Contador positivo $_counter';
+    if (_counter.value == 0) {
+      _message.value = 'Contador zerado';
+    } else if (_counter.value > 0) {
+      _message.value = 'Contador positivo ${_counter.value}';
     } else {
-      _message = 'Contador negativo $_counter';
+      _message.value = 'Contador negativo ${_counter.value}';
     }
   }
 
   void _updateCounterColor() {
-    if (_counter > 0) {
-      _counterColor = Colors.green;
-    } else if (_counter < 0) {
-      _counterColor = Colors.red;
+    if (_counter.value > 0) {
+      _counterColor.value = Colors.green;
+    } else if (_counter.value < 0) {
+      _counterColor.value = Colors.red;
     } else {
-      _counterColor = Colors.blue;
+      _counterColor.value = Colors.blue;
     }
   }
 
@@ -66,52 +65,61 @@ class _CounterScreenState extends State<CounterScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: _counterColor,
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(color: Colors.black, width: 2),
-                ),
-                child: Column(
-                  children: [
-                    const Text(
-                      'Valor do contador:',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                      ),
+              ValueListenableBuilder<Color>(
+                valueListenable: _counterColor,
+                builder: (context, color, _) {
+                  return Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: color,
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(color: Colors.black, width: 2),
                     ),
-                    const SizedBox(height: 10),
-                    Text(
-                      '$_counter',
-                      style: const TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                    child: Column(
+                      children: [
+                        const Text(
+                          'Valor do contador:',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        ValueListenableBuilder<int>(
+                          valueListenable: _counter,
+                          builder: (context, value, _) {
+                            return Text(
+                              '$value',
+                              style: const TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
               const SizedBox(height: 20),
-              Text(
-                _message,
-                style: const TextStyle(fontSize: 16),
-                textAlign: TextAlign.center,
+              ValueListenableBuilder<String>(
+                valueListenable: _message,
+                builder: (context, value, _) {
+                  return Text(
+                    value,
+                    style: const TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  );
+                },
               ),
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        _counter--;
-                        _updateMessage();
-                        _updateCounterColor();
-                      });
-                    },
+                    onPressed: _decrementCounter,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       foregroundColor: Colors.white,
@@ -120,13 +128,7 @@ class _CounterScreenState extends State<CounterScreen> {
                   ),
                   const SizedBox(width: 20),
                   ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        _counter = 0;
-                        _message = 'Contador resetado';
-                        _counterColor = Colors.blue;
-                      });
-                    },
+                    onPressed: _resetCounter,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.grey,
                       foregroundColor: Colors.white,
@@ -135,13 +137,7 @@ class _CounterScreenState extends State<CounterScreen> {
                   ),
                   const SizedBox(width: 20),
                   ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        _counter++;
-                        _updateMessage();
-                        _updateCounterColor();
-                      });
-                    },
+                    onPressed: _incrementCounter,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                       foregroundColor: Colors.white,
@@ -155,5 +151,13 @@ class _CounterScreenState extends State<CounterScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _counter.dispose();
+    _message.dispose();
+    _counterColor.dispose();
+    super.dispose();
   }
 }
