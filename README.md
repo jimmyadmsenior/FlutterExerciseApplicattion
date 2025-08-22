@@ -46,12 +46,6 @@ lib/
 	flutter run
 	```
 
-## 🖼️ Demonstração
-
-![Demonstração do App](https://user-images.githubusercontent.com/placeholder/demo.gif)
-
-> **Nota:** Imagem ilustrativa. Substitua pelo seu próprio screenshot ou GIF.
-
 ## 🛠️ Principais Tecnologias
 
 - [Flutter](https://flutter.dev/)
