@@ -40,7 +40,7 @@ class _CounterScreenState extends State<CounterScreen> {
       _message.value = 'Contador negativo ${_counter.value}';
     }
   }
-
+  
   void _updateCounterColor() {
     if (_counter.value > 0) {
       _counterColor.value = Colors.green;
