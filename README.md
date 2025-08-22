@@ -68,8 +68,7 @@ Contribuições são bem-vindas! Sinta-se à vontade para abrir issues, enviar p
 ## 📬 Contato
 
 Dúvidas, sugestões ou feedback? Entre em contato:
-- [Seu LinkedIn](https://www.linkedin.com/)
-- [Seu E-mail](mailto:seuemail@exemplo.com)
+- [Seu E-mail](mailto:jimmycastilho555@gmail.com)
 
 ---
 
